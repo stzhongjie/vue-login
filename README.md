@@ -22,7 +22,7 @@ $ npm install -g cnpm --registry=https://registry.npm.taobao.org
 ## 项目流程图
 为了让项目思路和所选技术更加清晰明了，画了一个图方便理解。
 
- ![image](http://images.vrm.cn/2018/04/09/vue注册登录系统 (2).png)
+ ![image](http://images.vrm.cn/2018/04/09/vue-login.png)
 
 ## 前端UI
 vue的首选UI库我是选择了饿了么的Element-UI了，其他诸如*iview*、*vue-strap*好像没有ele全面。
