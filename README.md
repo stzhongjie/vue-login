@@ -23,6 +23,24 @@ $ npm install -g cnpm --registry=https://registry.npm.taobao.org
 为了让项目思路和所选技术更加清晰明了，画了一个图方便理解。
 
  ![image](http://images.vrm.cn/2018/04/09/vue-login.png)
+ 
+## 项目启动
+1.初始化项目 
+
+*npm install* 
+
+2.启动项目 
+
+*npm run dev*
+
+3.启动MongoDB 
+
+*mongod --dbpath XXX*
+xxx是项目里*data*文件夹（也可以另行新建，数据库用于存放数据）的路径，也可直接拖入终端。
+
+4.启动服务端 
+
+*node server.js*
 
 ## 前端UI
 vue的首选UI库我是选择了饿了么的Element-UI了，其他诸如*iview*、*vue-strap*好像没有ele全面。
