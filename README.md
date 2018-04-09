@@ -569,14 +569,24 @@ router.use('/api',delUserRouter.routes(),delUserRouter.allowedMethods());
 //加载路由中间件
 app.use(router.routes()).use(router.allowedMethods());
 
-app.listen(8080, () => {
-    console.log('The server is running at http://localhost:' + 8080);
+app.listen(8888, () => {
+    console.log('The server is running at http://localhost:' + 8888);
 });
 
 ```
 代码里可以看到，获取用户和删除用户都需要验证token（详见下文jwt章节），并且我们把四个接口挂在到了/api上，和前面axios的请求路径一致。
 
-在项目根目录下面新建server文件夹，下面再新建/controller(文件夹)/user.js，用于存放数据库一系列操作。
+#### 接口地址配置
+另外由于我们的项目启动端口是8080，koa接口监听的端口是8888，于是需要在config/index.js文件里面，在dev配置里加上：
+
+```
+proxyTable: {
+	'/api': {
+		target: 'http://localhost:8888',
+		changeOrigin: true
+	}
+},
+```
 
 ##jsonwebtoken（JWT）
 
@@ -863,11 +873,11 @@ module.exports = {
 
 拿到用户post的表单信息，用户名和密码（注册用了哈希加密，此时要解密）。从数据库搜索该用户名，判断用户名是否存在，不存在返回错误，存在的话判断数据库里存的密码和用户提交的密码是否一致，一致的话给这个用户生成一个新的token，并存入数据库，返回成功。
 
-####获得所有用户信息
+#### 获得所有用户信息
 
 就是把上面公用findAllUsers方法封装了一下并把信息放在result里面，让后面helloworld页面可以获取到这个数据并展示出来。
 
-####删除某个用户
+#### 删除某个用户
 
 注意要先拿到需要删除的用户id，作为参数传入。
 
