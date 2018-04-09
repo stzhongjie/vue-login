@@ -588,7 +588,7 @@ proxyTable: {
 },
 ```
 
-##jsonwebtoken（JWT）
+## jsonwebtoken（JWT）
 
 JWT能够在HTTP通信过程中，帮助我们进行身份认证。
 
@@ -609,7 +609,7 @@ JWT能够在HTTP通信过程中，帮助我们进行身份认证。
 
 在server文件夹，下面新建/token(文件夹)里面新增checkToken.js和createToken.js，分别放置检查和新增token的方法。
 
-####安装
+#### 安装
 
 ```
 $ cnpm i jsonwebtoken -S
