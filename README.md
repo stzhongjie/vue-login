@@ -1,5 +1,4 @@
-#vue2.0+koa2+mongodb实现注册登录
-##前言
+## 前言
 前段时间和公司一个由技术转产品的同事探讨他的职业道路，对我说了一句深以为然的话：
 
 *“不要把自己禁锢在某一个领域，技术到产品的转变，首先就是思维上的转变。你一直做前端，数据的交互你只知道怎么进，却不知道里面是怎么出的，这就是局限性。”*
@@ -10,7 +9,7 @@
 
 系统环境：MacOS 10.13.3 
 
-####关于npm安装速度慢或不成功
+#### 关于npm安装速度慢或不成功
 
 使用淘宝镜像安装
 
@@ -20,18 +19,18 @@ $ npm install -g cnpm --registry=https://registry.npm.taobao.org
 
 然后所有的*npm install*改为*cnpm install*
 
-##项目流程图
+## 项目流程图
 为了让项目思路和所选技术更加清晰明了，画了一个图方便理解。
 
  ![image](http://images.vrm.cn/2018/04/09/vue注册登录系统 (2).png)
 
-##前端UI
+## 前端UI
 vue的首选UI库我是选择了饿了么的Element-UI了，其他诸如*iview*、*vue-strap*好像没有ele全面。
-####安装Element-UI
+#### 安装Element-UI
 ```
 $ npm i element-ui -S
 ```
-####引入Element-UI
+#### 引入Element-UI
 
 ```
 //在项目里的mian.js里增加下列代码
@@ -238,16 +237,16 @@ export default {
 ```
 
 
-##vue-router
+## vue-router
 *vue-router*是vue创建单页项目的核心，可以通过组合组件来组成应用程序，我们要做的是将组件(components)映射到路由(routes)，然后告诉*vue-router* 在哪里渲染它们。
 上面的代码里已有涉及到一些路由切换，我们现在来完善路由：
 
-####安装
+#### 安装
 
 ```
 $ cnpm i vue-router
 ```
-####引入
+#### 引入
 ```
 import Router from 'vue-router'
 Vue.use(Router)
@@ -262,7 +261,7 @@ login      登录主界面
 
 register   注册组件
 
-####路由守卫
+#### 路由守卫
 
 利用*router.beforeEach*路由守卫设置需要先登录的页面。通过*requiresAuth*这个字段来判断该路由是否需要登录权限，需要权限的路由就拦截，然后再判断是否有token(下文会讲到token)，有就直接登录，没有就跳到登录页面。
 
@@ -324,16 +323,16 @@ export default router;
 ```
 
 我们可以看到路由守卫中token是从store里面获取的，意味着我们是把token的各种状态存放到store里面，并进行获取，更新，删除等操作，这就需要引入vuex状态管理。
-##vuex
+## vuex
 
 解释一下为什么一个简单的注册登录单页需要用到vuex：项目中我们各个组件的操作基本都需要获取到token进行验证，如果组件A存储了一个token，组件B要获取这个token就涉及到了组件通信，这会非常繁琐。引入vuex，不再是组件间的通信，而是组件和store的通信，简单方便。
 
-####安装
+#### 安装
 ```
 $ cnpm i vuex --S
 ```
 
-####引入
+#### 引入
 
 在main.js引入store，vue实例中也要加入store
 
@@ -408,25 +407,25 @@ export default new Vuex.Store({
 
 我们写好了基础界面，接下来就是要把表单数据发送到后台并进行一系列处理。现在还没有后端接口没关系，我们先写好前端axios请求。
 
-##axios
+## axios
 vue的通讯之前使用*vue-resource*，有很多坑。直到vue2.0来临，直接抛弃*vue-resource*，而使用*axios*。
 
-####用途：
+#### 用途：
 封装ajax，用来发送请求，异步获取数据。以Promise为基础的HTTP客户端，适用于：浏览器和node.js。
 
 具体API中文说明：https://www.kancloud.cn/yunye/axios/234845
 
-####安装
+#### 安装
 ```
 $ cnpm i -S axios
 ```
 
-####引入
+#### 引入
 ```
 import axios from 'axios'
 ```
 
-####拦截器
+#### 拦截器
 
 在设置vue-router那部分加入了路由守卫拦截需要登录的路由，但这种方式只是简单的前端路由控制，并不能真正阻止用户访问需要登录权限的路由。当token失效了，但token依然保存在本地。这时候你去访问需要登录权限的路由时，实际上应该让用户重新登录。这时候就需要拦截器*interceptors* + 后端接口返回的http状态码来判断。
 
@@ -504,22 +503,22 @@ http://localhost:8080/api/delUser
 
 后面我们再利用这四个方法写相对应的后台接口。
 
-##服务端 server
-###注意
+## 服务端 server
+### 注意
 文章从这里开始进入服务端，由于服务端需要和数据库、http安全通讯（jwt）共同搭建，因此请结合本节和下面的数据库、jwt章节阅读。
 
 koa2可以使用可以使用async/await语法，免除重复繁琐的回调函数嵌套，并使用ctx来访问Context对象。
 
 现在我们用koa2写项目的API服务接口。
 
-####安装
+#### 安装
 ```
 $ cnpm i koa
 $ cnpm i koa-router -S      //koa路由中间件
 $ cnpm i koa-bodyparser -S  //处理post请求，并把koa2上下文的表单数据解析到ctx.request.body中
 ```
 
-####引入
+#### 引入
 ```
 const Koa = require('koa');
 ```
@@ -585,7 +584,7 @@ JWT能够在HTTP通信过程中，帮助我们进行身份认证。
 
 具体API详见：https://segmentfault.com/a/1190000009494020
 
-####Json Web Token是怎么工作的？
+#### Json Web Token是怎么工作的？
 1、客户端通过用户名和密码登录服务器；
 
 2、服务端对客户端身份进行验证；
@@ -606,7 +605,7 @@ JWT能够在HTTP通信过程中，帮助我们进行身份认证。
 $ cnpm i jsonwebtoken -S
 ```
 
-####createToken.js
+#### createToken.js
 ```
 const jwt = require('jsonwebtoken');
 module.exports = function(user_id){
@@ -617,7 +616,7 @@ module.exports = function(user_id){
 
 ```
 创建token时，我们把用户名作为JWT Payload的一个属性，并且把密钥设置为‘zhangzhongjie’,token过期时间设置为60s。意思是登录之后，60s内刷新页面不需要再重新登录。
-####checkToken.js
+#### checkToken.js
 ```
 const jwt = require('jsonwebtoken');
 //检查token是否过期
@@ -639,11 +638,11 @@ module.exports = async ( ctx, next ) => {
 ```
 先拿到token再用jwt.verify进行验证，注意此时密钥要对应上createToken.js的密钥‘zhangzhongjie’。如果token为空、过期、验证失败都抛出401错误，要求重新登录。
 
-##数据库 mongodb
+## 数据库 mongodb
 
 MongoDB是一种文档导向数据库管理系统，旨在为 WEB 应用提供可扩展的高性能数据存储解决方案。用node链接MongoDB非常方便。
 
-####安装
+#### 安装
 ```
 $ cnpm i mongoose -S
 ```
@@ -854,13 +853,13 @@ module.exports = {
 
 首先定义了公用的三个基础方法：findUser、findAllUsers、delUser。其中findUser需要传入*username*参数，delUser需要传入*id*参数。
 
-####注册方法
+#### 注册方法
 
 拿到用户post提交的表单信息，new之前按数据库设计好的并编译成model的User，把获取到的用户名，密码（需要用sha1哈希加密），token（利用之前创建好的createToken方法，并把用户名作为jwt的payload参数），生成时间存入。
 
 此时要先搜索数据库这个用户名是否存在，存在就返回失败，否则把user存入数据库并返回成功。
 
-####登录方法
+#### 登录方法
 
 拿到用户post的表单信息，用户名和密码（注册用了哈希加密，此时要解密）。从数据库搜索该用户名，判断用户名是否存在，不存在返回错误，存在的话判断数据库里存的密码和用户提交的密码是否一致，一致的话给这个用户生成一个新的token，并存入数据库，返回成功。
 
@@ -874,8 +873,8 @@ module.exports = {
 
 写完这些方法，就可以把前面没有完善的注册登录功能完善了。
 
-##整合
-####完善注册组件
+## 整合
+#### 完善注册组件
 在register.vue的表单验证后加上下列代码
 
 ```
@@ -897,7 +896,7 @@ if (valid) {
     })
 }
 ```
-####完善登录组件
+#### 完善登录组件
 登录组件我们之前没有任何数据提交，现在在验证成功后加入一系列方法完成登录操作：
 引入axios
 
@@ -938,7 +937,7 @@ if (valid) {
 ```
 将表单数据提交到后台，返回data状态，进行账号存在与否的判断操作。登录成功需要拿到返回的token和username存到store，跳到目标HelloWorld页。
 
-####完善目标页组件
+#### 完善目标页组件
 
 注册登录成功后，终于到了实际的展示页了——helloworld！
 
@@ -1052,7 +1051,7 @@ a {
 
 3.注销时要清除掉token
 
-##总结
+## 总结
 
 人的思维转变确实是最难的。按流程来说，应该是koa先设计出接口，前端再根据这个接口去请求，但我反过来，是先写好前端请求，再根据这个请求去制定接口。
 
