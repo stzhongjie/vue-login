@@ -36,6 +36,7 @@ $ npm install -g cnpm --registry=https://registry.npm.taobao.org
 3.启动MongoDB 
 
 *mongod --dbpath XXX*
+
 xxx是项目里*data*文件夹（也可以另行新建，数据库用于存放数据）的路径，也可直接拖入终端。
 
 4.启动服务端 
